@@ -1,0 +1,26 @@
+.product-card {
+    max-width: 385px;
+    max-height: 390px;
+    display: flex;
+    flex-direction: column;
+
+    &__image {
+        border-top-left-radius: var(--border-radius);
+        border-top-right-radius: var(--border-radius);
+    }
+
+    &__text {
+        background-color: #fff;
+        padding: 20px;
+        border-bottom-left-radius: var(--border-radius);
+        border-bottom-right-radius: var(--border-radius);
+    }
+
+    &__title {
+
+    }
+
+    &__descr {
+        font-size: var(--font-medium);
+    }
+}
