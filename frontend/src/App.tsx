@@ -1,23 +1,41 @@
 import './scss/App.scss'
 import { useEffect, useState } from 'react'
-import { ProductCard} from './components/ProductCard/ProductCard'
+import { ProductList } from './components/ProductsList/ProductsList';
+import { SearchComponent } from './components/SearchComponent/SearchComponent';
 import { type ProductCardType } from './components/ProductCard/ProductCard';
 import { QueryClientProvider, useQuery, QueryClient } from "@tanstack/react-query"
 
 
-
 export default function App() {
-  const [productCards, setProductCards] = useState<ProductCardType[]>([])
+  const [productData, setProductData] = useState<ProductCardType[]>([])
+  const [searchQuery, setSearchQuery] = useState('')
+  const [filteredCards, setFilteredCards] = useState<ProductCardType[]>([])
+
+  function filterCards() {
+    if (searchQuery != '' || productData.length == 0) {
+      setFilteredCards(productData.filter(product => product.title.toLowerCase().includes(searchQuery.toLowerCase())))
+    }
+
+    else {
+      setFilteredCards(productData)
+    }
+  }
 
   useEffect(() => {
-    setProductCards([
-      {"id":"1", "image": 'https://www.k-marumie.com/wpsys/wp-content/uploads/2025/01/0001.jpg', "title": 'Товар1', "description": 'Краткое описание товара', "price": 1000 },
-      {"id":"2", "image": 'https://www.k-marumie.com/wpsys/wp-content/uploads/2025/01/0001.jpg', "title": 'Товар1', "description": 'Краткое описание товара', "price": 1000 },
-      {"id":"3", "image": 'https://www.k-marumie.com/wpsys/wp-content/uploads/2025/01/0001.jpg', "title": 'Товар1', "description": 'Краткое описание товара', "price": 1000 },
-      {"id":"4", "image": 'https://www.k-marumie.com/wpsys/wp-content/uploads/2025/01/0001.jpg', "title": 'Товар1', "description": 'Краткое описание товара', "price": 1000 },
-      {"id":"5", "image": 'https://www.k-marumie.com/wpsys/wp-content/uploads/2025/01/0001.jpg', "title": 'Товар1', "description": 'Краткое описание товара', "price": 1000 },
-  ])}, [])
+    setProductData([
+      { "id": "1", "image": 'https://www.k-marumie.com/wpsys/wp-content/uploads/2025/01/0001.jpg', "title": 'Товар1', "description": 'Краткое описание товара', "price": 1000 },
+      { "id": "2", "image": 'https://www.k-marumie.com/wpsys/wp-content/uploads/2025/01/0001.jpg', "title": 'Товар2', "description": 'Краткое описание товара', "price": 1000 },
+      { "id": "3", "image": 'https://www.k-marumie.com/wpsys/wp-content/uploads/2025/01/0001.jpg', "title": 'Товар3', "description": 'Краткое описание товара', "price": 1000 },
+      { "id": "4", "image": 'https://www.k-marumie.com/wpsys/wp-content/uploads/2025/01/0001.jpg', "title": 'Товар2', "description": 'Краткое описание товара', "price": 1000 },
+      { "id": "5", "image": 'https://www.k-marumie.com/wpsys/wp-content/uploads/2025/01/0001.jpg', "title": 'Товар1', "description": 'Краткое описание товара', "price": 1000 },
+    ])
+  }, [])
 
+  useEffect(() => {
+    if (productData.length != 0) { filterCards() }
+  }, [productData])
+
+  
   return (
     <>
       <header>
@@ -32,11 +50,8 @@ export default function App() {
         </section>
         <section className='catalog-section'>
           <div className="container">
-            <div className="catalog-section__cards">
-              {productCards.map((card) => (
-                <ProductCard key={card.id} id={card.id} image={card.image} title={card.title} price={card.price}></ProductCard>
-              ))}
-            </div>
+            <SearchComponent btnValue='Поиск' queryFn={setSearchQuery} btnOnClick={() => filterCards}></SearchComponent>
+            <ProductList products={filteredCards}></ProductList>
           </div>
         </section>
       </main>

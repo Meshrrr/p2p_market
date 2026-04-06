@@ -22,6 +22,12 @@ img {
   height: 100%;
 }
 
+button {
+  cursor: pointer;
+  background-color: inherit;
+  border: none;
+}
+
 /* =============== header-styles =============== */
 
 header {
@@ -53,10 +59,4 @@ header {
   display: flex;
   padding: 66px;
   background-color: #F0F0F0;
-
-  &__cards {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-  }
 }

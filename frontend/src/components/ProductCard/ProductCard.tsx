@@ -9,17 +9,21 @@ export type ProductCardType = {
     owner?: string;
 }
 
-export const ProductCard: React.FC<ProductCardType> = ({ id, image, title, description, price, owner}) => {
+interface ProductCardProps {
+    product: ProductCardType
+}
+
+export const ProductCard = ( { product }: ProductCardProps ) => {
     return (
-    <div id={id} className="product-card">
-        <img className='product-card__image' src={image} />
+    <div id={product.id} className="product-card">
+        <img className='product-card__image' src={product.image} />
         <div className='product-card__text'>
             <div>
-                <h3 className='product-card__title'>{title}</h3>
-                <p className='product-card__descr'>{description}</p>
+                <h3 className='product-card__title'>{product.title}</h3>
+                <p className='product-card__descr'>{product.description}</p>
             </div>
             <span className='product-card__price'>
-                <strong>{price}</strong> ₽ / сутки
+                <strong>{product.price}</strong> ₽ / сутки
             </span>
         </div>
     </div>
