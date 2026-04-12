@@ -4,12 +4,16 @@ from typing import Optional
 import bcrypt
 import jwt
 
-from fastapi import HTTPException
+from fastapi import HTTPException, Depends, status
+from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from pydantic import BaseModel
 from pathlib import Path
 
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.schemas import RegisterRequest, LoginRequest
+from database import get_db
+from models import User
 
 BASE_DIR =Path(__file__).parent.parent.parent.parent
 
@@ -21,7 +25,9 @@ class AuthJWT(BaseModel):
 
 auth_jwt = AuthJWT()
 
-def encode_kwt(
+security = HTTPBearer()
+
+def encode_jwt(
         payload: dict,
         private_key: Optional[str] = None,
         algorithm: str = auth_jwt.algoritm,
@@ -61,3 +67,25 @@ def validate_password(password: str, hashed_password: str) -> bool:
 
     return checking
 
+async def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(security),
+                     db: AsyncSession = Depends(get_db)) -> User:
+    if not credentials:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
+                            detail="No authorization header")
+
+    token = credentials.credentials
+
+    payload = decode_jwt(token)
+
+    user_id = payload.get("sub")
+    if not user_id:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token")
+
+    result = await db.execute(select(User).where(User.id == user_id))
+
+    current_user = result.scalar_one_or_none()
+
+    if not current_user:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+
+    return current_user
