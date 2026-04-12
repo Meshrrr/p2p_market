@@ -12,8 +12,8 @@ from pathlib import Path
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from database import get_db
-from models import User
+from app.database import get_db
+from app.models import User
 
 BASE_DIR =Path(__file__).parent.parent.parent.parent
 

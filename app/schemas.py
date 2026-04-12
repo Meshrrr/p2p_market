@@ -1,10 +1,13 @@
-from pydantic import BaseModel, Field
+from datetime import datetime
+from typing import List
+
+from pydantic import BaseModel, Field, EmailStr
 
 
 class RegisterRequest(BaseModel):
     username: str
-    email: str
-    password: str = Field(ge=8, le=20)
+    email: EmailStr
+    password: str
 
 class LoginRequest(BaseModel):
     username: str
@@ -13,3 +16,12 @@ class LoginRequest(BaseModel):
 class TokenResponse(BaseModel):
     access_token: str
     token_type: str
+
+class UserProfile(BaseModel):
+    username: str
+    email: str
+    full_name: str
+    rating: float
+    reviews_count: int
+    preferred_categories: List[str]
+    created_at: datetime

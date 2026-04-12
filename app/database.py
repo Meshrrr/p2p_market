@@ -9,7 +9,7 @@ DATABASE_URL = os.getenv("DATABASE_URL",
 
 engine = create_async_engine(DATABASE_URL,)
 
-asyncSession = async_sessionmaker(engine=engine,
+asyncSession = async_sessionmaker(engine,
                                   class_=AsyncSession,
                                   expire_on_commit=False,
                                   )
@@ -22,7 +22,7 @@ async def create_tables():
         await conn.run_sync(Base.metadata.create_all)
 
 async def get_db() -> AsyncSession:
-    async with asyncSession as session:
+    async with asyncSession() as session:
         try:
             yield session
         finally:

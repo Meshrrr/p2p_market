@@ -11,9 +11,9 @@ from app.api.v1.auth.auth_utils import (
     get_current_user,
     validate_password,
     hash_password)
-from database import get_db
+from app.database import get_db
 
-router = APIRouter(prefix="/auth", tags=["auth"])
+router = APIRouter(prefix="/auth", tags=["Auth & Profile"])
 
 @router.post("/register", response_model=TokenResponse)
 async def register(user_data: RegisterRequest,
