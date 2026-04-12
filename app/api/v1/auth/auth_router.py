@@ -49,3 +49,27 @@ async def register(user_data: RegisterRequest,
     access_token = encode_jwt(payload=user_payload)
 
     return TokenResponse(access_token=access_token, token_type="bearer")
+
+@router.post("/login", response_model=TokenResponse)
+async def login(user_data: LoginRequest,
+                db: AsyncSession = Depends(get_db)):
+
+    check_user = await db.execute(select(User).where(User.username == user_data.username))
+
+    user = check_user.scalar_one_or_none()
+
+    if not user:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail='Incorrect username or password')
+
+    if not validate_password(user_data.password, user.hashed_password):
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail='Incorrect username or password')
+
+    user_payload = {
+        "sub": str(user.id),
+        "email": user.email,
+        "username": user.username
+    }
+
+    access_token = encode_jwt(payload=user_payload)
+
+    return TokenResponse(access_token=access_token, token_type="bearer")
