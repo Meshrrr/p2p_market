@@ -1,0 +1,672 @@
+openapi: 3.0.3
+info:
+  title: ВещьВокруг API
+  version: 1.0.0
+  description: >
+    REST API для платформы P2P-аренды и совладения вещами.
+    Модули: Поиск, Размещение, Взаимодействие, Интеллектуальная система (AI).
+  contact:
+    name: ВещьВокруг Dev Team
+    email: dev@vesh-vokrug.ru
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+
+servers:
+  - url: https://api.vesh-vokrug.ru/v1
+    description: Production
+  - url: http://localhost:8080/api/v1
+    description: Development
+
+tags:
+  - name: Auth & Profile
+    description: Регистрация, авторизация, личный кабинет
+  - name: Listings & Search
+    description: Создание объявлений, поиск, фильтрация, геолокация
+  - name: Interaction
+    description: Бронирование, депозит, контакты, отзывы
+  - name: AI & Smart Features
+    description: ИИ-анализ, рекомендации, энциклопедия, оценка рисков
+
+paths:
+  /auth/register:
+    post:
+      tags: [Auth & Profile]
+      summary: Регистрация пользователя
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterRequest'
+      responses:
+        '201':
+          description: Успешная регистрация
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '409':
+          $ref: '#/components/responses/Conflict'
+
+  /auth/login:
+    post:
+      tags: [Auth & Profile]
+      summary: Авторизация
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: Успешный вход
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+
+  /users/me:
+    get:
+      tags: [Auth & Profile]
+      summary: Личный кабинет (профиль)
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Данные профиля
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfile'
+    patch:
+      tags: [Auth & Profile]
+      summary: Обновление профиля и предпочтений
+      security:
+        - BearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserUpdateRequest'
+      responses:
+        '200':
+          description: Профиль обновлён
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfile'
+
+  /listings:
+    get:
+      tags: [Listings & Search]
+      summary: Поиск объявлений с фильтрацией и геолокацией
+      parameters:
+        - name: q
+          in: query
+          schema: { type: string }
+          description: Текстовый поиск
+        - name: lat
+          in: query
+          required: true
+          schema: { type: number, format: double }
+          description: Широта пользователя
+        - name: lon
+          in: query
+          required: true
+          schema: { type: number, format: double }
+          description: Долгота пользователя
+        - name: radius_km
+          in: query
+          schema: { type: number, default: 10 }
+          description: Радиус поиска в км
+        - name: category_id
+          in: query
+          schema: { type: string }
+        - name: price_min
+          in: query
+          schema: { type: number }
+        - name: price_max
+          in: query
+          schema: { type: number }
+        - name: start_date
+          in: query
+          schema: { type: string, format: date }
+        - name: end_date
+          in: query
+          schema: { type: string, format: date }
+        - name: sort
+          in: query
+          schema: { type: string, enum: [distance, price_asc, price_desc, rating, popular], default: distance }
+        - name: page
+          in: query
+          schema: { type: integer, default: 1 }
+        - name: limit
+          in: query
+          schema: { type: integer, default: 20 }
+      responses:
+        '200':
+          description: Список объявлений
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedListings'
+    post:
+      tags: [Listings & Search]
+      summary: Создание объявления
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateListingRequest'
+      responses:
+        '201':
+          description: Объявление создано
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Listing'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+
+  /listings/{listing_id}:
+    get:
+      tags: [Listings & Search]
+      summary: Детали объявления
+      parameters:
+        - name: listing_id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '200':
+          description: Детали объявления
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Listing'
+
+  /users/me/listings:
+    get:
+      tags: [Listings & Search]
+      summary: Мои объявления
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Список объявлений пользователя
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Listing'
+
+  /listing-templates:
+    get:
+      tags: [Listings & Search]
+      summary: Шаблоны объявлений по категориям
+      responses:
+        '200':
+          description: Список шаблонов
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ListingTemplate'
+
+  /bookings:
+    post:
+      tags: [Interaction]
+      summary: Создание бронирования (с расчетом депозита)
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BookingRequest'
+      responses:
+        '201':
+          description: Бронирование создано
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Booking'
+        '409':
+          $ref: '#/components/responses/Conflict'
+
+  /bookings/{booking_id}:
+    get:
+      tags: [Interaction]
+      summary: Статус бронирования
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: booking_id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '200':
+          description: Данные бронирования
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Booking'
+
+  /bookings/{booking_id}/status:
+    patch:
+      tags: [Interaction]
+      summary: Изменение статуса бронирования
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: booking_id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BookingStatusUpdate'
+      responses:
+        '200':
+          description: Статус обновлен
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Booking'
+
+  /listings/{listing_id}/contacts:
+    get:
+      tags: [Interaction]
+      summary: Получить контакты владельца (доступно после подтверждения бронирования или по разрешению владельца)
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: listing_id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '200':
+          description: Контактные данные
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContactInfo'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+
+  /reviews:
+    post:
+      tags: [Interaction]
+      summary: Оставить отзыв
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReviewRequest'
+      responses:
+        '201':
+          description: Отзыв сохранен
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Review'
+
+  /reviews/user/{user_id}:
+    get:
+      tags: [Interaction]
+      summary: Отзывы о пользователе
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+        - name: role
+          in: query
+          schema: { type: string, enum: [owner, renter] }
+      responses:
+        '200':
+          description: Список отзывов
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Review'
+
+  /ai/pricing:
+    post:
+      tags: [AI & Smart Features]
+      summary: ИИ-оценка справедливой стоимости аренды
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PricingRequest'
+      responses:
+        '200':
+          description: Рекомендованная цена и метрики рынка
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PricingResponse'
+
+  /ai/risk:
+    post:
+      tags: [AI & Smart Features]
+      summary: Анализ рисков по объявлению/пользователю
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RiskAnalysisRequest'
+      responses:
+        '200':
+          description: Оценка риска и рекомендации
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RiskAnalysisResponse'
+
+  /ai/advice/{category_id}:
+    get:
+      tags: [AI & Smart Features]
+      summary: Контекстная энциклопедия и инструкции
+      parameters:
+        - name: category_id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: Инструкции, чек-листы, видео
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdviceResponse'
+
+  /ai/recommendations:
+    get:
+      tags: [AI & Smart Features]
+      summary: Персонализированные рекомендации (сопутствующие товары, альтернативы)
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: context
+          in: query
+          description: ID объявления или поисковый запрос
+          schema: { type: string }
+        - name: type
+          in: query
+          description: Тип рекомендаций
+          schema: { type: string, enum: [accessories, alternatives, seasonal], default: accessories }
+      responses:
+        '200':
+          description: Список рекомендаций
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Listing'
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    RegisterRequest:
+      type: object
+      required: [email, phone, password, name]
+      properties:
+        email: { type: string, format: email }
+        phone: { type: string, pattern: '^\+?[0-9]{10,15}$' }
+        password: { type: string, minLength: 8 }
+        name: { type: string }
+
+    LoginRequest:
+      type: object
+      required: [identifier, password]
+      properties:
+        identifier: { type: string, description: Email или телефон }
+        password: { type: string }
+
+    AuthResponse:
+      type: object
+      properties:
+        access_token: { type: string }
+        token_type: { type: string, default: Bearer }
+        user_id: { type: string, format: uuid }
+
+    UserProfile:
+      type: object
+      properties:
+        id: { type: string, format: uuid }
+        name: { type: string }
+        email: { type: string }
+        phone: { type: string }
+        rating: { type: number, format: float, example: 4.8 }
+        reviews_count: { type: integer }
+        preferred_categories: { type: array, items: { type: string } }
+        created_at: { type: string, format: date-time }
+
+    UserUpdateRequest:
+      type: object
+      properties:
+        name: { type: string }
+        preferred_categories: { type: array, items: { type: string } }
+        notification_preferences: { type: object }
+
+    CreateListingRequest:
+      type: object
+      required: [title, category_id, price, description]
+      properties:
+        title: { type: string }
+        category_id: { type: string }
+        price: { type: number, format: double }
+        deposit_amount: { type: number, format: double }
+        description: { type: string }
+        images: { type: array, items: { type: string, format: uri } }
+        location:
+          type: object
+          properties:
+            lat: { type: number }
+            lon: { type: number }
+            address: { type: string }
+        availability:
+          type: object
+          properties:
+            calendar_enabled: { type: boolean }
+            blocked_dates: { type: array, items: { type: string, format: date } }
+        template_id: { type: string, format: uuid, nullable: true }
+
+    Listing:
+      type: object
+      properties:
+        id: { type: string, format: uuid }
+        owner_id: { type: string, format: uuid }
+        title: { type: string }
+        category_id: { type: string }
+        price: { type: number }
+        deposit_amount: { type: number }
+        description: { type: string }
+        images: { type: array, items: { type: string } }
+        location: { type: object }
+        rating: { type: number }
+        status: { type: string, enum: [active, booked, inactive] }
+        created_at: { type: string, format: date-time }
+
+    ListingTemplate:
+      type: object
+      properties:
+        id: { type: string, format: uuid }
+        category_id: { type: string }
+        title: { type: string }
+        default_description: { type: string }
+        suggested_fields: { type: array, items: { type: string } }
+        safety_checklist: { type: array, items: { type: string } }
+
+    BookingRequest:
+      type: object
+      required: [listing_id, start_date, end_date]
+      properties:
+        listing_id: { type: string, format: uuid }
+        start_date: { type: string, format: date }
+        end_date: { type: string, format: date }
+        deposit_method: { type: string, enum: [platform_escrow, direct, none] }
+        message: { type: string }
+
+    Booking:
+      type: object
+      properties:
+        id: { type: string, format: uuid }
+        listing_id: { type: string, format: uuid }
+        renter_id: { type: string, format: uuid }
+        owner_id: { type: string, format: uuid }
+        start_date: { type: string, format: date }
+        end_date: { type: string, format: date }
+        status: { type: string, enum: [pending, confirmed, active, completed, cancelled] }
+        deposit_amount: { type: number }
+        total_cost: { type: number }
+        payment_link: { type: string, nullable: true }
+
+    BookingStatusUpdate:
+      type: object
+      required: [status]
+      properties:
+        status: { type: string, enum: [confirmed, cancelled] }
+        reason: { type: string }
+
+    ContactInfo:
+      type: object
+      properties:
+        phone: { type: string }
+        messenger: { type: string }
+        preferred_contact_time: { type: string }
+        note: { type: string }
+
+    ReviewRequest:
+      type: object
+      required: [booking_id, rating, comment]
+      properties:
+        booking_id: { type: string, format: uuid }
+        rating: { type: integer, minimum: 1, maximum: 5 }
+        comment: { type: string }
+        role: { type: string, enum: [renter, owner] }
+
+    Review:
+      type: object
+      properties:
+        id: { type: string, format: uuid }
+        author_id: { type: string, format: uuid }
+        target_id: { type: string, format: uuid }
+        rating: { type: integer }
+        comment: { type: string }
+        created_at: { type: string, format: date-time }
+
+    PricingRequest:
+      type: object
+      required: [category_id, condition, location]
+      properties:
+        category_id: { type: string }
+        condition: { type: string, enum: [new, good, used, worn] }
+        location: { type: object, properties: { lat: { type: number }, lon: { type: number } } }
+        similar_market_data: { type: array, items: { type: object } }
+
+    PricingResponse:
+      type: object
+      properties:
+        suggested_min: { type: number }
+        suggested_max: { type: number }
+        optimal: { type: number }
+        market_confidence: { type: number, format: float, minimum: 0, maximum: 1 }
+        seasonality_factor: { type: number }
+
+    RiskAnalysisRequest:
+      type: object
+      required: [listing_id]
+      properties:
+        listing_id: { type: string, format: uuid }
+        user_history_context: { type: object, nullable: true }
+
+    RiskAnalysisResponse:
+      type: object
+      properties:
+        risk_score: { type: number, minimum: 0, maximum: 100 }
+        risk_level: { type: string, enum: [low, medium, high] }
+        flags: { type: array, items: { type: string } }
+        recommendations: { type: array, items: { type: string } }
+
+    AdviceResponse:
+      type: object
+      properties:
+        category_id: { type: string }
+        safety_tips: { type: array, items: { type: string } }
+        first_launch_guide: { type: string }
+        maintenance_checklist: { type: array, items: { type: string } }
+        video_links: { type: array, items: { type: string, format: uri } }
+
+    PaginatedListings:
+      type: object
+      properties:
+        data: { type: array, items: { $ref: '#/components/schemas/Listing' } }
+        pagination:
+          type: object
+          properties:
+            page: { type: integer }
+            limit: { type: integer }
+            total: { type: integer }
+            has_next: { type: boolean }
+
+  responses:
+    BadRequest:
+      description: Ошибка валидации запроса
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Conflict:
+      description: Ресурс уже существует или конфликт состояний
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Forbidden:
+      description: Доступ запрещен. Требуется подтверждение бронирования или повышенные права.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+    Error:
+      type: object
+      properties:
+        code: { type: string }
+        message: { type: string }
+        details: { type: object, nullable: true }
