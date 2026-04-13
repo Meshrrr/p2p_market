@@ -1,0 +1,45 @@
+ItemCreate:
+        title ( string )
+        category ( string )
+        photos: (array of obj
+            type: string
+            format: uri )
+        pricePerDay ( integer )
+        deposit ( integer )
+        location ($ref: '#/components/schemas/GeoPoint')
+        description ( string )
+
+      required:
+        - title
+        - category
+        - pricePerDay
+        - deposit
+        - location
+
+
+UserProfile:
+        phone (string ; '^\+7\d{10}$' ; "+79161234567" )
+        email ( string )
+        location ( string )
+            example: "Москва, м. Динамо"
+
+
+category:
+          type: string
+          enum:
+            - tools
+            - sports
+            - photo
+            - camping
+            - car
+            - electronics
+            - home
+            - other
+
+
+SearchFilters:
+    - title + description
+    - category
+    - minPrice / maxPrice
+    - location
+    - start / end date

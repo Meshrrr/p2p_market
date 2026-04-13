@@ -2,10 +2,11 @@ import './ProductCard.scss'
 
 export type ProductCardType = {
     id: string;
-    image: string;
     title: string;
+    category?: string;
+    image: string; //photos: Array[string, string, ...]
+    pricePerDay: number;
     description?: string;
-    price: number;
     owner?: string;
 }
 
@@ -23,7 +24,7 @@ export const ProductCard = ( { product }: ProductCardProps ) => {
                 <p className='product-card__descr'>{product.description}</p>
             </div>
             <span className='product-card__price'>
-                <strong>{product.price}</strong> ₽ / сутки
+                <strong>{product.pricePerDay}</strong> ₽ / сутки
             </span>
         </div>
     </div>
