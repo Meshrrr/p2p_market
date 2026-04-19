@@ -1,15 +1,27 @@
 :root {
   --text-color: #000;
+
+  --main-color: #444877;
+  --additional-color: #788EBB;
+  --accent-color: #FFAA72;
+
+  --main-bg-color: #E0EAF6;
+  --lite-bg-color: #FFFFFF;
+
   --font-big: 32px;
-  --font-medium: 20px;
+  --font-medium: 24px;
   --font-small: 14px;
+
+  --text-fs-big: 20px;
+  --text-fs-normal: 16px;
+
   --border-radius-small: 6px;
   --border-radius: 15px;
-  --accent-color: ;
 }
 
 body {
-  background-color: #fff;
+  background-color: var(--main-bg-color);
+  font-family: Inter, arial, sans-serif;
 }
 
 .container {
@@ -37,6 +49,16 @@ input {
 a {
   cursor: pointer;
   text-decoration: none;
+  color: inherit;
+}
+
+h1 {
+  font-size: 36px;
+  font-weight: 400;
+}
+
+p, span {
+  font-size: var(--text-fs-big);
 }
 
 /* =============== hero-section =============== */ 
@@ -47,7 +69,7 @@ a {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #C2C2C2;
+  background-color: var(--accent-color);
 }
 
 /* =============== catalog-section =============== */ 
@@ -55,5 +77,4 @@ a {
 .catalog-section {
   display: flex;
   padding: 66px;
-  background-color: #F0F0F0;
 }

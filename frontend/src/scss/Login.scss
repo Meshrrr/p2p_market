@@ -19,7 +19,12 @@
     &__block-content {
         display: flex;
         flex-direction: column;
-        margin-bottom: 30px;
+        margin-bottom: 45px;
+    }
+
+    &__block-content a {
+        font-size: 20px;
+        margin-top: 10px;
     }
 }
 
@@ -27,7 +32,7 @@
     width: 500px;
     padding: 20px;
     border-radius: var(--border-radius);
-    background-color: #F0F0F0;
+    background-color: var(--lite-bg-color);
     font-size: var(--font-medium);
 }
 
@@ -38,7 +43,8 @@
 }
 
 .login-form button:first-of-type {
-    background-color: #C2C2C2;
+    font-weight: 500;
+    background-color: var(--accent-color);
 }
 
 .login-form label,

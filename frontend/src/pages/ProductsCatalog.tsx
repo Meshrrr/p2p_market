@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { ProductList } from '../components/ProductsList/ProductsList';
 import { SearchComponent } from '../components/SearchComponent/SearchComponent';
 import { type ProductCardType } from '../components/ProductCard/ProductCard';
+import { SearchIcon } from '../components/SearchIcon/SearchIcon';
 
 export const ProductsCatalog = () => {
 
@@ -12,7 +13,7 @@ export const ProductsCatalog = () => {
     function filterCards() {
         if (searchQuery != '' || productData.length == 0) {
             setFilteredCards(productData.filter(product => product.title.toLowerCase().includes(searchQuery.toLowerCase())))
-        } else { setFilteredCards(productData)}
+        } else { setFilteredCards(productData) }
     }
 
     useEffect(() => {
@@ -39,7 +40,8 @@ export const ProductsCatalog = () => {
             </section>
             <section className='catalog-section'>
                 <div className="container">
-                    <SearchComponent btnValue='Поиск' queryFn={setSearchQuery} btnOnClick={() => filterCards}></SearchComponent>
+                    <SearchComponent 
+                    btnValue={<SearchIcon></SearchIcon>} queryFn={setSearchQuery} btnOnClick={() => filterCards}></SearchComponent>
                     <ProductList products={filteredCards}></ProductList>
                 </div>
             </section>

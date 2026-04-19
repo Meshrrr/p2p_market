@@ -2,12 +2,12 @@
 
 header {
   padding: 16px 0;
-  background-color: #D9D9D9;
+  background-color: var(--main-color);
 }
 
-.profile-photo {
-  width: 64px;
-  height: 64px;
-  background-color: #B5B5B5;
-  border-radius: 100%;
+.header__content {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 35px;
 }

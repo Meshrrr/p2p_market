@@ -19,7 +19,7 @@ export const ProductCard = ( { product }: ProductCardProps ) => {
     <div id={product.id} className="product-card">
         <img className='product-card__image' src={product.image} />
         <div className='product-card__text'>
-            <div>
+            <div className='product-card__content'>
                 <h3 className='product-card__title'>{product.title}</h3>
                 <p className='product-card__descr'>{product.description}</p>
             </div>
