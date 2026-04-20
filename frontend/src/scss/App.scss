@@ -3,10 +3,12 @@
 
   --main-color: #444877;
   --additional-color: #788EBB;
+  --additional-darker-color: #BACDF4;
   --accent-color: #FFAA72;
 
   --main-bg-color: #E0EAF6;
   --lite-bg-color: #FFFFFF;
+  --disabled-bg-color: #E3EAEF;
 
   --font-big: 32px;
   --font-medium: 24px;
@@ -25,7 +27,7 @@ body {
 }
 
 .container {
-  width: 1196px;
+  max-width: 1196px;
   margin: 0 auto;
 }
 
@@ -55,6 +57,10 @@ a {
 h1 {
   font-size: 36px;
   font-weight: 400;
+}
+
+h1, h2, h3, h4, h5 {
+  font-weight: 500;
 }
 
 p, span {

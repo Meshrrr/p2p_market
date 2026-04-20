@@ -1,0 +1,39 @@
+.switcher {
+    cursor: pointer;
+    position: relative;
+    width: max-content;
+    display: flex;
+    align-items: center;
+    padding: 8px 40px;
+    border-radius: 30px;
+    background-color: var(--disabled-bg-color);
+
+    &__body {   
+        display: flex;
+        gap: 70px;
+    }
+
+    &__body span {
+        z-index: 10;
+        font-size: var(--font-medium);
+    }
+
+    &__colb {
+        box-sizing: border-box;
+        position: absolute;
+        top: 0px;
+        width: 200px;
+        height: 43px;
+        padding: 8px 40px;
+        border-radius: 30px;
+        background-color: var(--accent-color);
+    }
+
+    &__colb.first {
+        left: 0px;
+    }
+
+    &__colb.second {
+        right: 0px;
+    }
+}

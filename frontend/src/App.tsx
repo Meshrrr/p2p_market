@@ -6,7 +6,7 @@ import { NotFound } from './pages/NotFound'
 import { Login } from './pages/Login'
 import { Register } from './pages/Register'
 import { Profile } from './pages/Profile'
-
+import { ProductCreation } from './pages/ProductCreation'
 
 export default function App() {
   return (
@@ -18,8 +18,10 @@ export default function App() {
           <BaseLayout>
             <ProductsCatalog></ProductsCatalog>
           </BaseLayout>
-        }></Route>
+        }>
+        </Route>
         <Route path='/profile' element={<Profile></Profile>}></Route>
+        <Route path='/profile/create-product' element={<ProductCreation></ProductCreation>}></Route>
         <Route path='*' element={<NotFound></NotFound>}></Route>
       </Routes>
     </BrowserRouter>

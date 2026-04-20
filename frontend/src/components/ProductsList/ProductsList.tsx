@@ -8,7 +8,9 @@ interface ProductListProps {
 export const ProductList = ({ products }: ProductListProps) => {
     if (products.length === 0) {
         return (
-            <h2>Объявления не найдены</h2>
+            <div className='no-products'>
+                <h2>Товары не найдены</h2>
+            </div>
         )
     }
 

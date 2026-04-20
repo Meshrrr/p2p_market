@@ -2,7 +2,7 @@ import './ButtonComponent.scss'
 import type { ReactNode } from 'react';
 
 interface ButtonProps {
-    onClick?: () => void;
+    onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
     className?: string;
     children?: ReactNode;  
 }

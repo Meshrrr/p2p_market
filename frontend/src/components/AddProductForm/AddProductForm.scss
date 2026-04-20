@@ -1,0 +1,77 @@
+.product-form {
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+    padding: 60px;
+    padding-top: 35px;
+    margin-top: 32px;
+    background-color: var(--lite-bg-color);
+
+    &__title {
+        color: var(--main-color);
+    }
+
+    &__field,
+    &__text-field,
+    &__photos p,
+    &__add-button {
+        display: flex;
+        font-size: var(--font-medium);
+    }
+
+    &__field label,
+    &__text-field label,
+    &__photos p {
+        color: var(--main-color);
+    }
+
+    &__field label {
+        min-width: max-content;
+    }
+
+    &__field input {
+        width: 100%;
+        padding: 0px 20px;
+        border-bottom: 1px solid var(--main-color);
+        background-color: inherit;
+    }
+
+    &__field input:focus-visible {
+        outline: none;
+    }
+
+    &__text-field {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    &__text-field textarea {
+        height: 280px;
+        width: 100%;
+        min-width: 300px;
+        max-width: 100%;
+        background-color: var(--main-bg-color);
+        box-shadow: 0px 4px 4px 0px #00000040 inset;
+    }
+
+    &__photos {
+        display: flex;
+        gap: 20px;
+    }
+
+    &__add-button {
+        align-self: flex-end;
+        padding: 16px 50px;
+        border-radius: 20px;
+        background-color: var(--accent-color);
+        font-weight: 500;
+    }
+
+}
+
+.img-add-btn {
+    padding: 5px 20px;
+    border-radius: 20px;
+    font-size: var(--text-fs-big);
+    background-color: var(--additional-darker-color);
+}
