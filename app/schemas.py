@@ -28,7 +28,7 @@ class UserProfile(BaseModel):
 
 class UpdateRequestUser(BaseModel):
     username: Optional[str] = None
-    full_name: Optional[str] = Field(None, max_length=255)
+    full_name: Optional[str] = Field(None, max_length=30)
     preferred_categories: Optional[List[str]] = None
     notification_preferences: Optional[dict] = None
 
@@ -39,3 +39,29 @@ class CreateCategory(BaseModel):
 
 class CategoryResponse(BaseModel):
     id: int
+
+
+class CreateListing(BaseModel):
+    name: str
+    description: str
+    image: str
+    price: float
+
+class UpdateListing(BaseModel):
+    name: Optional[str] = None
+    description: Optional[str] = None
+    image: Optional[str] = None
+    price: Optional[float] = None
+
+class ListingResponse(BaseModel):
+    id: int
+    name: str
+    description: str
+    image: str
+    price: float
+    reting: float
+    created_at: datetime
+    category_id: int
+    owner_id: int
+
+

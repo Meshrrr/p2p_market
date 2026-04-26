@@ -58,7 +58,26 @@ class Category(Base):
 
 
 
-# class Product(Base):
-#     __tablename__ = "product"
-#
-#     id: Mapped[int] = mapped_column(primary_key=True, index=True)
+class Product(Base):
+    __tablename__ = "product"
+
+    id: Mapped[uuid.UUID] = mapped_column(UUID, primary_key=True, index=True)
+
+    owner_id: Mapped[UUID] = mapped_column(UUID, ForeignKey("user.id", ondelete="CASCADE"), index=True)
+
+    owner: Mapped["User"] = relationship("User", back_populates="products")
+
+    category_id: Mapped[uuid.UUID] = mapped_column(UUID, ForeignKey("category.id"), index=True)
+
+    category: Mapped["Category"] = relationship("Category", back_populates="products")
+
+    name: Mapped[str] = mapped_column(String, nullable=False)
+
+    description: Mapped[str] = mapped_column(String, ge=5, le=250)
+
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+
+    location: Mapped[dict] = mapped_column(JSON, nullable=False)
+
+    availability: Mapped[dict] = mapped_column(JSON, nullable=True)
+
