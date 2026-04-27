@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import Optional
 
 import bcrypt
@@ -13,9 +13,9 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database import get_db
-from app.models import User
+from app.models.User import User
 
-BASE_DIR =Path(__file__).parent.parent.parent.parent
+BASE_DIR =Path(__file__).parent.parent.parent.parent.parent
 
 class AuthJWT(BaseModel):
     private_key_path: Path = BASE_DIR / "certs/jwt-private.pem"
@@ -37,7 +37,7 @@ def encode_jwt(
 
     to_encode = payload.copy()
     now = datetime.utcnow()
-    to_encode.update(exp=expire,
+    to_encode.update(exp=now + timedelta(minutes=expire),
                      iat=now)
 
     encode = jwt.encode(to_encode, private_key, algorithm=algorithm)

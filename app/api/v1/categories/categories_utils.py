@@ -6,7 +6,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database import get_db
 from app.schemas import CategoryResponse
-from models import Category
+from app.models.Category import Category
 
 router = APIRouter(prefix="/categories")
 

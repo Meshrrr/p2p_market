@@ -3,7 +3,7 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.schemas import RegisterRequest, LoginRequest, TokenResponse
-from app.models import User
+from app.models.User import User
 
 from app.api.v1.auth.auth_utils import (
     encode_jwt,
@@ -38,7 +38,7 @@ async def register(user_data: RegisterRequest,
 
     db.add(user)
     await db.commit()
-    await db.refresh(User)
+    await db.refresh(user)
 
     user_payload = {
         "sub": str(user.id),

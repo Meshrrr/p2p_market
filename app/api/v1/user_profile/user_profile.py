@@ -5,7 +5,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database import get_db
 from app.schemas import UserProfile, UpdateRequestUser
-from app.models import User
+from app.models.User import User
 
 from app.api.v1.auth.auth_utils import get_current_user
 

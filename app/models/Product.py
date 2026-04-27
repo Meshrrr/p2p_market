@@ -7,14 +7,13 @@ from sqlalchemy import String, DateTime, func, UUID, ForeignKey, Float, JSON
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.database import Base
-from app.models.User import User
 from app.models.Category import Category
 
 
 class Product(Base):
     __tablename__ = "product"
 
-    id: Mapped[uuid.UUID] = mapped_column(UUID, primary_key=True, index=True)
+    id: Mapped[uuid.UUID] = mapped_column(UUID, primary_key=True, index=True, default=uuid.uuid4)
 
     owner_id: Mapped[UUID] = mapped_column(UUID, ForeignKey("user.id", ondelete="CASCADE"), index=True)
 
@@ -26,7 +25,7 @@ class Product(Base):
 
     name: Mapped[str] = mapped_column(String, nullable=False)
 
-    description: Mapped[str] = mapped_column(String, ge=5, le=250)
+    description: Mapped[str] = mapped_column(String)
 
     price: Mapped[float] = mapped_column(Float, nullable=False)
 

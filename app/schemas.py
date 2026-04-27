@@ -1,3 +1,4 @@
+import uuid
 from datetime import datetime
 from typing import List, Optional
 
@@ -20,10 +21,10 @@ class TokenResponse(BaseModel):
 class UserProfile(BaseModel):
     username: str
     email: str
-    full_name: str
-    rating: float
-    reviews_count: int
-    preferred_categories: List[str]
+    full_name: Optional[str] = None
+    rating: Optional[float] = None
+    reviews_count: Optional[int] = None
+    preferred_categories: Optional[List[str]]
     created_at: datetime
 
 class UpdateRequestUser(BaseModel):
@@ -43,15 +44,19 @@ class CategoryResponse(BaseModel):
 
 class CreateListing(BaseModel):
     name: str
-    description: str
+    description: str = Field(None, max_length=250)
     image: str
-    price: float
+    price: float = Field(None, gt=0)
+    deposit: float = Field(None, gt=0)
+    category_id: uuid.UUID
 
 class UpdateListing(BaseModel):
     name: Optional[str] = None
     description: Optional[str] = None
     image: Optional[str] = None
     price: Optional[float] = None
+    deposit: Optional[float] = None
+
 
 class ListingResponse(BaseModel):
     id: int
@@ -59,9 +64,13 @@ class ListingResponse(BaseModel):
     description: str
     image: str
     price: float
-    reting: float
+    deposit: float
+    rating: float
+    review_count: int
+    location: str
     created_at: datetime
     category_id: int
     owner_id: int
+
 
 
