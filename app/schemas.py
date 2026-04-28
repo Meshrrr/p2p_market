@@ -39,7 +39,7 @@ class CreateCategory(BaseModel):
     description: str = Field(None, ge=10, le=150)
 
 class CategoryResponse(BaseModel):
-    id: int
+    id: uuid.UUID
 
 
 class CreateListing(BaseModel):
@@ -48,6 +48,7 @@ class CreateListing(BaseModel):
     image: str
     price: float = Field(None, gt=0)
     deposit: float = Field(None, gt=0)
+    location: str = Field(None, max_length=30)
     category_id: uuid.UUID
 
 class UpdateListing(BaseModel):
@@ -59,7 +60,7 @@ class UpdateListing(BaseModel):
 
 
 class ListingResponse(BaseModel):
-    id: int
+    id: uuid.UUID
     name: str
     description: str
     image: str
@@ -69,8 +70,11 @@ class ListingResponse(BaseModel):
     review_count: int
     location: str
     created_at: datetime
-    category_id: int
-    owner_id: int
+    category_id: uuid.UUID
+    owner_id: uuid.UUID
 
+class DetailListingResponse(ListingResponse):
+    owner_name: str
+    owner_rating: float
 
 

@@ -3,7 +3,7 @@ import uuid
 from datetime import datetime
 from typing import List
 
-from sqlalchemy import String, DateTime, func, UUID, ForeignKey, Float, JSON
+from sqlalchemy import String, DateTime, func, UUID, ForeignKey, Float, JSON, Boolean
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.database import Base
@@ -31,8 +31,10 @@ class Product(Base):
 
     deposit: Mapped[float] = mapped_column(Float)
 
+    location: Mapped[str] = mapped_column(String, nullable=False)
+
     images: Mapped[List[str]] = mapped_column(JSON, default=list)
 
-    availability: Mapped[dict] = mapped_column(JSON, nullable=True)
+    is_available: Mapped[bool] = mapped_column(Boolean, default=True)
 
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
