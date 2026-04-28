@@ -100,7 +100,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/UserProfile'
 
-  /listings:
+  /search:
     get:
       tags: [Listings & Search]
       summary: Поиск объявлений с фильтрацией и геолокацией
@@ -154,6 +154,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/PaginatedListings'
+
+  /listings:
     post:
       tags: [Listings & Search]
       summary: Создание объявления
