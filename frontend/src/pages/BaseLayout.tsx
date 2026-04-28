@@ -13,11 +13,23 @@ export const BaseLayout = ({ children }: BaseLayoutProps) => {
             <header>
                 <div className='container'>
                     <div className='header__content'>
-                        <ButtonComponent>
-                            <svg width="43" height="40" viewBox="0 0 43 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M21.5 34.3889C32.546 34.3889 41.5 27.0259 41.5 17.9444C41.5 8.863 32.546 1.5 21.5 1.5C10.454 1.5 1.5 8.863 1.5 17.9444C1.5 22.3783 3.634 26.401 7.102 29.3589C6.042 33.6694 3.5 36.4444 1.5 38.5C7.5 38.5 10.554 36.4876 14.14 33.2398C16.42 33.9798 18.9 34.3889 21.5 34.3889Z" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
-                            </svg>
-                        </ButtonComponent>
+                        <div className='header__nav-btns'>
+                            <ButtonComponent>
+                                <svg width="43" height="40" viewBox="0 0 43 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M21.5 34.3889C32.546 34.3889 41.5 27.0259 41.5 17.9444C41.5 8.863 32.546 1.5 21.5 1.5C10.454 1.5 1.5 8.863 1.5 17.9444C1.5 22.3783 3.634 26.401 7.102 29.3589C6.042 33.6694 3.5 36.4444 1.5 38.5C7.5 38.5 10.554 36.4876 14.14 33.2398C16.42 33.9798 18.9 34.3889 21.5 34.3889Z" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+                            </ButtonComponent>
+                            <ButtonComponent>
+                                <Link to='/catalog'>
+                                    <svg width="41" height="38" viewBox="0 0 41 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M6.25024 36.5H34.7502" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+                                        <path d="M6.25024 36.5V12.2692M34.7502 36.5V12.2692" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+                                        <path d="M1.50012 15.859L20.5001 1.5L39.5001 15.859" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+                                        <path d="M15.7501 36.5V20.3461H25.2501V36.5" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+                                    </svg>
+                                </Link>
+                            </ButtonComponent>
+                        </div>
                         <ButtonComponent>
                             <Link to='/profile'>
                                 <svg width="52" height="52" viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">

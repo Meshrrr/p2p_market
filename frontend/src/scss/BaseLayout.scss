@@ -5,11 +5,19 @@ header {
   top: 0;
   padding: 16px 0;
   background-color: var(--main-color);
+  z-index: 10000;
 }
 
 .header__content {
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  gap: 35px;
+  gap: 180px;
+  flex-wrap: wrap;
+}
+
+.header__nav-btns {
+  display: flex;
+  align-items: center;
+  gap: 30px;
 }

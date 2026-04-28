@@ -2,12 +2,15 @@ import './ProductCard.scss'
 
 export type ProductCardType = {
     id: string;
-    title: string;
+    owner_id: string;
+    name: string;
     category?: string;
     image: string; //photos: Array[string, string, ...]
-    pricePerDay: number;
-    description?: string;
-    owner?: string;
+    price: number;
+    city: string;
+    deposit: number;
+    description: string;
+    created_at?: string;
 }
 
 interface ProductCardProps {
@@ -20,11 +23,11 @@ export const ProductCard = ( { product }: ProductCardProps ) => {
         <img className='product-card__image' src={product.image} />
         <div className='product-card__text'>
             <div className='product-card__content'>
-                <h3 className='product-card__title'>{product.title}</h3>
+                <h3 className='product-card__title'>{product.name}</h3>
                 <p className='product-card__descr'>{product.description}</p>
             </div>
             <span className='product-card__price'>
-                <strong>{product.pricePerDay}</strong> ₽ / сутки
+                <strong>{product.deposit}</strong> ₽ / сутки
             </span>
         </div>
     </div>

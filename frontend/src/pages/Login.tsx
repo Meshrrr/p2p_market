@@ -13,11 +13,11 @@ export const Login = () => {
             <form className="login-form">
                 <div className="login-form__block-content">
                     <label htmlFor="mail">Почта:</label>
-                    <input type="text" placeholder="" required/>
+                    <input type="text" required/>
                 </div>
                 <div className="login-form__block-content">
                     <label htmlFor="password">Пароль:</label>
-                    <input type="text" placeholder="" required/>
+                    <input type="text" required/>
                     <a>Забыли пароль?</a>
                 </div>
                 <ButtonComponent><Link to='/catalog'>Войти</Link></ButtonComponent>

@@ -1,20 +1,10 @@
 import axios from "axios"
 import type { ProductCardType } from "./components/ProductCard/ProductCard"
+import { mockProducts, categories, cities } from "./mock"
 
 const baseUrl = '/'
 
-const mockProducts = [
-    { "id": "1", "image": 'https://www.k-marumie.com/wpsys/wp-content/uploads/2025/01/0001.jpg', "title": 'Электрогриль', "description": 'Краткое описание товара', "pricePerDay": 450 },
-    { "id": "2", "image": 'https://www.k-marumie.com/wpsys/wp-content/uploads/2025/01/0001.jpg', "title": 'Коллекция книг', "description": 'Краткое описание товара', "pricePerDay": 200 },
-    { "id": "3", "image": 'https://www.k-marumie.com/wpsys/wp-content/uploads/2025/01/0001.jpg', "title": 'Лодочный мотор', "description": 'Краткое описание товара', "pricePerDay": 1000 },
-    { "id": "4", "image": 'https://www.k-marumie.com/wpsys/wp-content/uploads/2025/01/0001.jpg', "title": 'Палатка', "description": 'Краткое описание товара', "pricePerDay": 400 },
-    { "id": "5", "image": 'https://www.k-marumie.com/wpsys/wp-content/uploads/2025/01/0001.jpg', "title": 'Набор инструментов', "description": 'Краткое описание товара', "pricePerDay": 300 },
-    { "id": "6", "image": 'https://www.k-marumie.com/wpsys/wp-content/uploads/2025/01/0001.jpg', "title": 'Reno Logan', "description": 'Краткое описание товара', "pricePerDay": 3000 },
-    { "id": "7", "image": 'https://www.k-marumie.com/wpsys/wp-content/uploads/2025/01/0001.jpg', "title": 'Трактор', "description": 'Краткое описание товара', "pricePerDay": 5000 },
-    { "id": "8", "image": 'https://www.k-marumie.com/wpsys/wp-content/uploads/2025/01/0001.jpg', "title": 'Бензопила', "description": 'Краткое описание товара', "pricePerDay": 300 },
-]
-
-export async function getProducts(path: string) {
+export async function getData<T>(path: string) {
     /* try {
         const response = await axios.get(`${baseUrl}${path}`)
         return response.data
@@ -23,7 +13,8 @@ export async function getProducts(path: string) {
         console.log(error);
         return []
     } */
-    return mockProducts
+    const data = (path == 'categories' ? categories : path == 'cities' ? cities : mockProducts)
+    return data as T
 }
 
 
@@ -37,3 +28,4 @@ export async function addProduct(path: string, product: ProductCardType) {
         return 'Ошибка создания товара, попробуйте позже!'
     }
 }
+
