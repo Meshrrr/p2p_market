@@ -1,19 +1,11 @@
-version: '3.8'
-
 services:
   app:
     build:
       context: .
       dockerfile: Dockerfile
     container_name: vesh-vokrug-app
-    environment:
-      DATABASE_URL: postgresql+asyncpg://vesh_user:vesh_password@postgres:5432/vesh_vokrug
-      REDIS_URL: redis://redis:6379/0
-      JWT_SECRET_KEY: ${JWT_SECRET_KEY:-your-super-secret-jwt-key-change-in-production}
-      JWT_ALGORITHM: HS256
-      ACCESS_TOKEN_EXPIRE_MINUTES: 30
-      APP_ENV: development
-      DEBUG: true
+    env_file:
+      - .env
     ports:
       - "8000:8000"
     volumes:
@@ -34,17 +26,15 @@ services:
   postgres:
     image: postgres:16-alpine
     container_name: vesh-vokrug-postgres
-    environment:
-      POSTGRES_DB: vesh_vokrug
-      POSTGRES_USER: vesh_user
-      POSTGRES_PASSWORD: vesh_password
+    env_file:
+      - .env
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - ./docker/postgres/init:/docker-entrypoint-initdb.d:ro
     ports:
       - "5432:5432"
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U vesh_user -d vesh_vokrug"]
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
       interval: 10s
       timeout: 5s
       retries: 5
