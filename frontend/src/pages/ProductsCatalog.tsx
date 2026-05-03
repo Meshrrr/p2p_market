@@ -47,7 +47,6 @@ export const ProductsCatalog = () => {
 
     function filterCards() {
         if (productData.length != 0) {
-            console.log('g');
             setFilteredCards(productData.filter(product =>
                 (!filters.name || product.name.toLowerCase().includes(filters.name.toLowerCase())) &&
                 (!filters.city || product.city === filters.city) &&
@@ -58,13 +57,13 @@ export const ProductsCatalog = () => {
     }
 
     useEffect(() => {
-        getData<ProductCardType[]>('products') /* получаем товары */
+        getData<ProductCardType[]>('/products') /* получаем товары */
             .then(data => setProductData(data))
 
-        getData<[]>('categories') /* получаем категории товаров */
+        getData<[]>('/categories') /* получаем категории товаров */
             .then(data => setCategories(data))
 
-        getData<[]>('cities') /* получаем города */
+        getData<[]>('/cities') /* получаем города */
             .then(data => setCities(data))
     }, [])
 

@@ -10,24 +10,25 @@ export type ProductCardType = {
     city: string;
     deposit: number;
     description: string;
-    created_at?: string;
+    created_at: string;
 }
 
 interface ProductCardProps {
-    product: ProductCardType
+    product: ProductCardType;
+    onClick?: () => void;
 }
 
-export const ProductCard = ( { product }: ProductCardProps ) => {
+export const ProductCard = ( { product, onClick }: ProductCardProps ) => {
     return (
-    <div id={product.id} className="product-card">
+    <div id={product.id} className="product-card" onClick={onClick}>
         <img className='product-card__image' src={product.image} />
         <div className='product-card__text'>
             <div className='product-card__content'>
                 <h3 className='product-card__title'>{product.name}</h3>
-                <p className='product-card__descr'>{product.description}</p>
+                {/* <p className='product-card__descr'>{product.description}</p> */}
             </div>
             <span className='product-card__price'>
-                <strong>{product.deposit}</strong> ₽ / сутки
+                <strong>{product.price}</strong> ₽ / сутки
             </span>
         </div>
     </div>

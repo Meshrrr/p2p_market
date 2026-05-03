@@ -1,12 +1,12 @@
 import axios from "axios"
 import type { ProductCardType } from "./components/ProductCard/ProductCard"
 import { mockProducts, categories, cities } from "./mock"
+import { BASE_URL } from "./constants"
 
-const baseUrl = '/'
 
 export async function getData<T>(path: string) {
     /* try {
-        const response = await axios.get(`${baseUrl}${path}`)
+        const response = await axios.get(`${BASE_URL}${path}`)
         return response.data
 
     } catch (error) {
@@ -20,7 +20,7 @@ export async function getData<T>(path: string) {
 
 export async function addProduct(path: string, product: ProductCardType) {
     try {
-        const response = await axios.post(`${baseUrl}${path}`, product)
+        const response = await axios.post(`${BASE_URL}${path}`, product)
         return 'Товар успешно добавлен!'
 
     } catch (error) {

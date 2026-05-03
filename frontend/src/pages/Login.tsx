@@ -21,7 +21,7 @@ export const Login = () => {
                     <a>Забыли пароль?</a>
                 </div>
                 <ButtonComponent><Link to='/catalog'>Войти</Link></ButtonComponent>
-                <ButtonComponent><Link to='/'>Регистрация</Link></ButtonComponent>
+                <ButtonComponent><Link to='/register'>Регистрация</Link></ButtonComponent>
             </form>
         </div>
     )

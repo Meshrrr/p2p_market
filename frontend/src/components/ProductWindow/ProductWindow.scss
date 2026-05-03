@@ -1,0 +1,86 @@
+.product-window {
+    width: 1230px;
+    min-width: 350px;
+    min-height: 600px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: space-between;
+
+    &__info {
+        display: flex;
+        gap: 30px;
+    }
+
+    &__owner {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    &__owner .product-photo {
+        width: 380px;
+        height: 260px;
+        background-color: var(--main-color);
+        border-radius: 20px;
+    }
+
+    &__owner-info {
+        display: flex;
+        gap: 8px;
+    }
+
+    &__owner-name {
+        display: flex;
+        flex-direction: column;
+    }
+
+    &__owner-photo {
+        width: 50px;
+        height: 50px;
+        border-radius: 100%;
+        background-color: var(--additional-color);
+    }
+
+    &__rent {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    &__product-info {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    &__price {
+        display: flex;
+        gap: 16px;
+        align-items: center;
+    }
+
+    &__price span {
+        font-size: 26px;
+    }
+
+    &__product-name {
+        font-size: var(--font-big);
+    }
+
+    &__product-category,
+    &__owner-name span,
+    button {
+        font-size: var(--font-medium);
+    }
+
+    &__product-descr {
+        font-size: 18px;
+    }
+
+    button {
+        border-radius: 20px;
+        padding: 15px 30px;
+        background-color: var(--accent-color);
+    }
+}
