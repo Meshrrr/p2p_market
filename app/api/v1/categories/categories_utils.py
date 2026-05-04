@@ -8,14 +8,17 @@ from app.database import get_db
 from app.schemas import CategoryResponse
 from app.models.Category import Category
 
-router = APIRouter(prefix="/categories")
+router = APIRouter(prefix="/categories", tags=["categories"])
 
 @router.get("/", response_model=List[CategoryResponse])
 async def get_categories(db: AsyncSession = Depends(get_db)):
 
-    result = await db.execute(select(Category).where(Category.is_active == True))
+    result = await db.execute(select(Category))
 
     categories = result.scalars().all()
+
+    if not categories:
+        return []
 
     return categories
 

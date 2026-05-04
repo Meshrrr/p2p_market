@@ -11,7 +11,7 @@ from app.schemas import CreateListing, ListingResponse, DetailListingResponse, U
 from app.api.v1.auth.auth_utils import get_current_user
 from app.models.Product import Product
 from app.models.User import User
-from models.Category import Category
+from app.models.Category import Category
 
 router = APIRouter(prefix="/listings", tags=["listings"])
 
@@ -30,9 +30,10 @@ async def create_listing(listing: CreateListing,
 
     add_listing = Product(name=listing.name,
                           description=listing.description,
-                          image=listing.image,
+                          images=listing.images,
                           price=listing.price,
                           deposit=listing.deposit,
+                          location=listing.location,
                           owner_id=current_user.id,
                           category_id=listing.category_id)
 
@@ -46,7 +47,7 @@ async def create_listing(listing: CreateListing,
 async def get_listings(db:AsyncSession = Depends(get_db),
                        limit: int = 20,
                        skip: int = 0,
-                       category_id: int = None):
+                       category_id: uuid.UUID = None):
     query = select(Product)
 
     if category_id:
@@ -68,7 +69,7 @@ async def update_listing(listing_id: uuid.UUID,
 
     query = await db.execute(select(Product).where(Product.id == listing_id))
 
-    listing = await query.scalar_one_or_none()
+    listing = query.scalar_one_or_none()
 
     if not listing:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Listing not found")
@@ -98,7 +99,20 @@ async def get_listing_by_id(listing_id: uuid.UUID,
     if not result:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Listing not found")
 
-    return result
+    return DetailListingResponse(
+        id=result.id,
+        name=result.name,
+        description=result.description,
+        images=result.images,
+        price=result.price,
+        deposit=result.deposit,
+        location=result.location,
+        created_at=result.created_at,
+        category_id=result.category_id,
+        owner_id=result.owner_id,
+        owner_name=result.owner.username if result.owner else "Unknown",
+        owner_rating=result.owner.rating if result.owner else None
+    )
 
 @router.delete("/{listing_id}")
 async def delete_listing(listing_id: uuid.UUID,
