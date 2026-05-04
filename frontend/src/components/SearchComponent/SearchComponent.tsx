@@ -24,7 +24,8 @@ export const SearchComponent = ({ btnValue, btnOnClick, onChange }: SearchCompon
             </InputComponent>
             <ButtonComponent
                 onClick={btnOnClick}
-                className='search-button'>
+                className='search-button'
+                disabled={true}>
                 {btnValue}
             </ButtonComponent>
         </div>

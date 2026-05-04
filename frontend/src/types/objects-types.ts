@@ -1,4 +1,4 @@
-export type ProductCardType = {
+/* export type ProductCardType = {
   id: string;
   owner_id: string;
   name: string;
@@ -9,24 +9,21 @@ export type ProductCardType = {
   deposit: number;
   description: string;
   created_at?: string;
-};
+}; */
 
 // Модель объявления 
-export type ListingType = {
+export type ProductCardType = {
   id: string;
   owner_id: string;
   title: string;
   category_id: string;
+  category: string;
   price: number;
   deposit_amount: number;
   description: string;
   images: string[];
-  location: {
-    lat: number;
-    lon: number;
-    address?: string;
-  };
-  rating: number;
+  city: string
+  rating?: number;
   status: "active" | "booked" | "inactive";
   created_at: string; // ISO date-time
 };
@@ -115,7 +112,7 @@ export type ApiErrorType = {
 
 // Пагинированный список объявлений (ответ на /search и /users/me/listings)
 export type PaginatedListingsType = {
-  data: ListingType[];
+  data: ProductCardType[];
   pagination: {
     page: number;
     limit: number;

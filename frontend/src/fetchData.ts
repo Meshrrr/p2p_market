@@ -1,5 +1,6 @@
 import axios from "axios"
-import type { ProductCardType } from "./components/ProductCard/ProductCard"
+import { useQuery } from "@tanstack/react-query"
+import type { ProductCardType } from './types/objects-types'
 import { mockProducts, categories, cities } from "./mock"
 import { BASE_URL } from "./constants"
 
@@ -13,7 +14,7 @@ export async function getData<T>(path: string) {
         console.log(error);
         return []
     } */
-    const data = (path == 'categories' ? categories : path == 'cities' ? cities : mockProducts)
+    const data = (path == '/categories' ? categories : path == '/cities' ? cities : mockProducts)
     return data as T
 }
 
@@ -29,3 +30,28 @@ export async function addProduct(path: string, product: ProductCardType) {
     }
 }
 
+
+const fetchProducts = () => getData<ProductCardType[]>('/products')
+const fetchCategories = () => getData<[]>('/categories')
+const fetchCities = () => getData<[]>('/cities')
+
+export const useProductsQuery = () => {
+  return useQuery({
+    queryKey: ['products'],
+    queryFn: fetchProducts,
+  })
+}
+
+export const useCategoriesQuery = () => {
+  return useQuery({
+    queryKey: ['categories'],
+    queryFn: fetchCategories,
+  })
+}
+
+export const useCitiesQuery = () => {
+  return useQuery({
+    queryKey: ['cities'],
+    queryFn: fetchCities,
+  })
+}

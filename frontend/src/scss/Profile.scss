@@ -34,6 +34,8 @@
 }
 
 .profile-products {
+    max-width: 1195px;
+    margin: 0 auto;
     display: flex;
     flex-direction: column;
     gap: 30px;
@@ -47,7 +49,7 @@
         justify-content: space-between;
         flex-direction: column;
         gap: 10px;
-        padding: 0px 30px;
+        /* padding: 0px 30px; */
     }
 
     &__header h2 {

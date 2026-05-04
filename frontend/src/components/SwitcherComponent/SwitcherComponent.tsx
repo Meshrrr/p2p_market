@@ -4,21 +4,24 @@ import './SwitcherComponent.scss'
 interface SwitcherProps {
     states: Array<string>;
     onClick?: () => void;
+    returnStatus: (arg: string) => void;
 }
 
-export const SwitcherComponent = ({ states, onClick }: SwitcherProps) => {
+export const SwitcherComponent = ({ states, onClick, returnStatus }: SwitcherProps) => {
 
     const [status, setStatus] = useState<'first' | 'second'>('first')
 
     const changeStatus = () => {
-        status === 'first' ? setStatus('second') : setStatus('first') 
+        const value = status === 'first' ? 'second' : 'first'
+        setStatus(value)
+        returnStatus(value)
     }
 
     return (
         <div
             className='switcher'
             onClick={() => {
-                onClick;
+                onClick
                 changeStatus()
             }}>
             <div className='switcher__body'>

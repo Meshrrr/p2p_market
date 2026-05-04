@@ -48,6 +48,20 @@
         align-items: center;
     }
 
+    &__rent-info {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    &__rent-info input {
+        outline: none;
+        padding: 10px 20px;
+        border-radius: 20px;
+        font-size: 18px;
+        background-color: var(--main-bg-color);
+    }
+
     &__product-info {
         display: flex;
         flex-direction: column;
@@ -68,14 +82,21 @@
         font-size: var(--font-big);
     }
 
-    &__product-category,
     &__owner-name span,
     button {
         font-size: var(--font-medium);
     }
 
+    &__product-category {
+        width: max-content;
+        padding: 8px 15px;
+        border-radius: 15px;
+        font-size: var(--text-fs-big);
+        background-color: var(--accent-color);
+    }
+
     &__product-descr {
-        font-size: 18px;
+        font-size: var(--text-fs-big);
     }
 
     button {
@@ -83,4 +104,20 @@
         padding: 15px 30px;
         background-color: var(--accent-color);
     }
+
+    button:disabled {
+        cursor: default;
+        background-color: var(--disabled);
+    }
+}
+
+.flatpickr-day.selected,
+.flatpickr-day.startRange.selected,
+.flatpickr-day.startRange,
+.flatpickr-day.endRange,
+.flatpickr-day.startRange:hover,
+.flatpickr-day.endRange:hover,
+.flatpickr-day:hover:not(.selected) {
+    background-color: var(--accent-color);
+    border-color: var(--accent-color);
 }

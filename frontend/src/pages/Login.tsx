@@ -12,13 +12,12 @@ export const Login = () => {
             <h1>Вход в профиль</h1>
             <form className="login-form">
                 <div className="login-form__block-content">
-                    <label htmlFor="mail">Почта:</label>
+                    <label htmlFor="mail">Имя пользователя:</label>
                     <input type="text" required/>
                 </div>
                 <div className="login-form__block-content">
                     <label htmlFor="password">Пароль:</label>
-                    <input type="text" required/>
-                    <a>Забыли пароль?</a>
+                    <input type="password" required/>
                 </div>
                 <ButtonComponent><Link to='/catalog'>Войти</Link></ButtonComponent>
                 <ButtonComponent><Link to='/register'>Регистрация</Link></ButtonComponent>

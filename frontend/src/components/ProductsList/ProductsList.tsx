@@ -1,16 +1,20 @@
 import './ProductsList.scss'
-import { ProductCard, type ProductCardType } from '../ProductCard/ProductCard'
+import { ProductCard } from '../ProductCard/ProductCard'
+import type { ProductCardType } from '../../types/objects-types';
 import { ModalWindow } from '../ModalWindow/ModalWindow';
 import { ProductWindow } from '../ProductWindow/ProductWindow';
 import { useState } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
 
 interface ProductListProps {
     products: ProductCardType[];
+    productsUpdate?: (arg: any) => void;
 };
 
 export const ProductList = ({ products }: ProductListProps) => {
     const [productShown, setProductShown] = useState<ProductCardType>()
     const [modalVisible, setModalVisible] = useState<boolean>(false)
+    const queryClient = useQueryClient()
 
     if (products.length === 0) {
         return (
@@ -24,6 +28,20 @@ export const ProductList = ({ products }: ProductListProps) => {
         setModalVisible(modalVisible === true ? false : true)
     }
 
+    const changeRentStatus = () => {
+    
+        queryClient.setQueryData(['products'], (actualData: ProductCardType[] | undefined) => {
+            if (!actualData) return actualData
+
+            return actualData.map(product =>
+                product.id === productShown?.id
+                    ? { ...product, status: 'booked' } 
+                    : product
+            )
+        })
+        setProductShown(prev => prev ? { ...prev, status: 'booked' } : prev)
+    }
+
     return (
         <div>
             <div className='product-list'>
@@ -35,7 +53,11 @@ export const ProductList = ({ products }: ProductListProps) => {
                 ))}
             </div>
             <ModalWindow visible={modalVisible} changeVisibility={changeModalVisibility}>
-                <ProductWindow product={productShown}></ProductWindow>
+                {productShown ?
+                    <ProductWindow product={productShown} action={changeRentStatus}></ProductWindow>
+                    :
+                    <></>
+                }
             </ModalWindow>
         </div>
     )

@@ -3,6 +3,7 @@
     flex-wrap: wrap;
     column-gap: 20px;
     row-gap: 30px;
+    min-height: 600px;
 }
 
 .no-products {
@@ -10,4 +11,5 @@
     align-items: center;
     justify-content: center;
     margin-bottom: 30px;
+    min-height: 600px;
 }

@@ -1,12 +1,11 @@
-import { useEffect, useState, useMemo } from 'react'
+import { useState, useMemo } from 'react'
 import { ProductList } from '../components/ProductsList/ProductsList';
 import { SearchComponent } from '../components/SearchComponent/SearchComponent';
-import { type ProductCardType } from '../components/ProductCard/ProductCard';
 import { SearchIcon } from '../components/SearchIcon/SearchIcon';
-import { getData } from '../fetchData';
 import { selectStyles } from '../custom/styles';
 import Select, { type SingleValue } from 'react-select';
 import { InputComponent } from '../components/InputComponent/InputComponent';
+import { useProductsQuery, useCategoriesQuery, useCitiesQuery } from '../fetchData';
 
 type SelectOption = {
     value: string;
@@ -15,10 +14,9 @@ type SelectOption = {
 
 export const ProductsCatalog = () => {
 
-    const [productData, setProductData] = useState<ProductCardType[]>([])
-    const [filteredCards, setFilteredCards] = useState<ProductCardType[]>([])
-    const [categories, setCategories] = useState([])
-    const [cities, setCities] = useState([])
+    const { data: productData, isLoading: productsLoading } = useProductsQuery()
+    const { data: categories, isLoading: categoriesLoading } = useCategoriesQuery()
+    const { data: cities, isLoading: citiesLoading } = useCitiesQuery()
 
     const [filters, setFilters] = useState({
         name: '',
@@ -45,31 +43,16 @@ export const ProductsCatalog = () => {
     };
 
 
-    function filterCards() {
-        if (productData.length != 0) {
-            setFilteredCards(productData.filter(product =>
-                (!filters.name || product.name.toLowerCase().includes(filters.name.toLowerCase())) &&
-                (!filters.city || product.city === filters.city) &&
-                (!filters.category || product.category === filters.category) &&
-                (!filters.price.length || (product.price >= filters.price[0] && product.price <= filters.price[1]))
-            ))
-        } else { setFilteredCards(productData) }
-    }
-
-    useEffect(() => {
-        getData<ProductCardType[]>('/products') /* получаем товары */
-            .then(data => setProductData(data))
-
-        getData<[]>('/categories') /* получаем категории товаров */
-            .then(data => setCategories(data))
-
-        getData<[]>('/cities') /* получаем города */
-            .then(data => setCities(data))
-    }, [])
-
-    useEffect(() => {
-        if (productData.length != 0) { filterCards() }
-    }, [productData])
+    const filteredCards = useMemo(() => {
+        if (!productData) return []
+        return productData.filter(product =>
+            (!filters.name || product.title.toLowerCase().includes(filters.name.toLowerCase())) &&
+            (!filters.city || product.city === filters.city) &&
+            (!filters.category || product.category === filters.category) &&
+            (!filters.price.length || (product.price >= filters.price[0] && product.price <= filters.price[1]))
+        )
+    }, [productData, filters])
+    
 
     return (
         <>
@@ -82,7 +65,7 @@ export const ProductsCatalog = () => {
                     <SearchComponent
                         btnValue={<SearchIcon></SearchIcon>}
                         onChange={(e) => handleQueryChange(e.target.value)}
-                        btnOnClick={() => filterCards()}
+                        btnOnClick={() => {}}
                     >
                     </SearchComponent>
                     <h3 className='catalog-section__filters-title'>Фильтры:</h3>

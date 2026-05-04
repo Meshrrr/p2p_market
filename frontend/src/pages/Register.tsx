@@ -29,6 +29,7 @@ export const Register = () => {
                     <input type="text" required />
                 </div>
                 <ButtonComponent><Link to='/'>Регистрация</Link></ButtonComponent>
+                <ButtonComponent><Link to='/'>Назад</Link></ButtonComponent>
             </form>
         </div>
     )

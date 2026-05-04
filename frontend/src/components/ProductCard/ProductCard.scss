@@ -1,7 +1,7 @@
 .product-card {
     cursor: pointer;
     width: 385px;
-    min-height: 390px;
+    height: 410px;
     display: flex;
     flex-direction: column;
     border-radius: var(--border-radius);
@@ -29,6 +29,10 @@
         font-size: var(--font-medium);
         font-weight: 400;
         margin-bottom: 10px;
+    }
+
+    &__category {
+        color: var(--main-color);
     }
 
 }
