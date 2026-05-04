@@ -1,5 +1,6 @@
 import uuid
 from datetime import datetime
+from enum import Enum
 from typing import List, Optional
 
 from pydantic import BaseModel, Field, EmailStr
@@ -76,3 +77,25 @@ class DetailListingResponse(ListingResponse):
     owner_rating: Optional[float] = None
 
 
+class BookingEnumStatus(str, Enum):
+    PENDING = "pending"
+    CONFIRMED = "confirmed"
+    CANCELLED = "cancelled"
+    COMPLETED = "completed"
+
+class BookingCreate(BaseModel):
+    start_date: datetime
+    end_date: datetime
+
+class BookingResponse(BaseModel):
+    id: uuid.UUID
+    product_id: uuid.UUID
+    user_id: uuid.UUID
+    start_date: datetime
+    end_date: datetime
+    status: str
+    created_at: datetime
+    confirmed_at: Optional[datetime] = None
+
+class BookingUpdateStatus(BaseModel):
+    status: BookingEnumStatus
