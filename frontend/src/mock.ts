@@ -85,7 +85,7 @@ export const mockProducts = [
         "images": ['https://www.k-marumie.com/wpsys/wp-content/uploads/2025/01/0001.jpg'],
         "price": 300,
         "deposit_amount": 0,
-        "city": "Москва",
+        "city": "Санкт-Петербург",
         "created_at": "2025-12-10T14:30:00.000Z",
         "status": "active",
     }

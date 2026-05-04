@@ -57,7 +57,6 @@ export const Profile = () => {
                         <SwitcherComponent states={['в наличии', 'в аренде']} returnStatus={switchProducts}></SwitcherComponent>
                     </div>
                     <ProductList products={showedProducts}></ProductList>
-                    <div className='container'></div>
                 </div>
             </div>
         </BaseLayout>

@@ -16,7 +16,8 @@ export const ProductCard = ( { product, onClick }: ProductCardProps ) => {
                 <p className='product-card__category'><i>{product.category}</i></p>
             </div>
             <span className='product-card__price'>
-                <strong>{product.price}</strong> ₽ / сутки
+                <p><strong>{product.price}</strong> ₽ / сутки</p>
+                <p className='product-card__city'>г. {product.city}</p>
             </span>
         </div>
     </div>
