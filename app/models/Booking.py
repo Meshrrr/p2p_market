@@ -1,16 +1,15 @@
 import enum
 import uuid
 from datetime import datetime
-from email.policy import default
 
-from sqlalchemy import ForeignKey, DateTime, func,
-from sqlalchemy.databases import postgresql
+from sqlalchemy import ForeignKey, DateTime, func
+from sqlalchemy.dialects import postgresql
 from sqlalchemy.orm import Mapped, relationship
 from sqlalchemy.testing.schema import mapped_column
 
 from app.database import Base
-from models.Product import Product
-from models.User import User
+from app.models.Product import Product
+from app.models.User import User
 
 
 class BookingStatus(str, enum.Enum):
