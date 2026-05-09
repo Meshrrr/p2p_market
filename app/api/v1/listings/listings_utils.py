@@ -1,5 +1,6 @@
 import uuid
-from typing import List
+from enum import Enum
+from typing import List, Optional
 
 from fastapi import Depends, APIRouter, HTTPException, status
 from sqlalchemy import select
@@ -15,11 +16,21 @@ from app.models.Category import Category
 
 router = APIRouter(prefix="/listings", tags=["listings & search"])
 
+class SortParams(Enum, str):
+    POPULAR = "popular"
+    PRICE_ASC = "price_asc"
+    PRICE_DESC = "price_desc"
+
 @router.get("/search", response_model=List[ListingResponse])
-async def search_listings(q: str, location: str, price_min: int, price_max: int, limit: int = 20, skip: int = 0,
+async def search_listings(q: str = None, location: str = None,
+                          category_id: Optional[uuid.UUID] = None,
+                          price_min: int = None,
+                          price_max: int = None,
+                          sort: SortParams = SortParams.POPULAR,
+                          limit: int = 20, skip: int = 0,
         db: AsyncSession = Depends(get_db)):
 
-    query = select(Product)
+    query = select(Product).options(selectinload(Product.owner))
 
     if q:
         query = query.where(Product.name.ilike(f"%{q}%") | Product.description.ilike(f"%{q}%"))
@@ -27,11 +38,23 @@ async def search_listings(q: str, location: str, price_min: int, price_max: int,
     if location:
         query = query.where(Product.location.ilike(f"%{location}%"))
 
-    if price_min:
+    if price_min is not None:
         query = query.where(Product.price >= price_min)
 
     if price_max:
         query = query.where(Product.price <= price_max)
+
+    if category_id:
+        query = query.where(Product.category_id == category_id)
+
+
+    if sort == SortParams.POPULAR:
+        query = query.order_by(Product.owner.reviews_count.desc())
+    elif sort == SortParams.PRICE_DESC:
+        query = query.order_by(Product.price.desc())
+    elif sort == SortParams.PRICE_ASC:
+        query = query.order_by(Product.price.asc())
+
 
     query = query.limit(limit).offset(skip)
     result = await db.execute(query)
