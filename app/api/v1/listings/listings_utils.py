@@ -13,7 +13,36 @@ from app.models.Product import Product
 from app.models.User import User
 from app.models.Category import Category
 
-router = APIRouter(prefix="/listings", tags=["listings"])
+router = APIRouter(prefix="/listings", tags=["listings & search"])
+
+@router.get("/search", response_model=List[ListingResponse])
+async def search_listings(q: str, location: str, price_min: int, price_max: int, limit: int = 20, skip: int = 0,
+        db: AsyncSession = Depends(get_db)):
+
+    query = select(Product)
+
+    if q:
+        query = query.where(Product.name.ilike(f"%{q}%") | Product.description.ilike(f"%{q}%"))
+
+    if location:
+        query = query.where(Product.location.ilike(f"%{location}%"))
+
+    if price_min:
+        query = query.where(Product.price >= price_min)
+
+    if price_max:
+        query = query.where(Product.price <= price_max)
+
+    query = query.limit(limit).offset(skip)
+    result = await db.execute(query)
+
+    listings = result.scalars().all()
+    if not listings:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Listings not found")
+
+    return listings
+
+
 
 @router.post("/", response_model=ListingResponse)
 async def create_listing(listing: CreateListing,

@@ -99,3 +99,11 @@ class BookingResponse(BaseModel):
 
 class BookingUpdateStatus(BaseModel):
     status: BookingEnumStatus
+
+
+class SearchRequest(BaseModel):
+    q: str
+    location: str
+    category: str
+    limit: int
+    skip: int
